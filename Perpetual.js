@@ -4,8 +4,14 @@
 
 /*
 	Todo :
+	
+		- get rid of laser angle/power and spawn rate display
+		- change kills to a progress bar
+		- move score to upper-left, and level # and progress bar to upper right (so only one row)
+		- add the current level/upgrade level for laser angle/power beneath the upgrade buttons
+		- once they reach the needed # of kills, explode all the other on-screen enemies
+	
 		- sound
-			- convert explosion sounds to mp3/ogg also (install lame)
 			- figure out why firefox cuts out
 		- game over needs to be done
 		- in help, add new slide that explains saving (misc.) (also note that p = pause)
@@ -471,7 +477,7 @@ function updateFrame() {
 	
 	ctx.restore();			// get rid of clipping region
 	
-	//drawGameBoundary(false);// draw white boundary over clipped region
+	drawGameBoundary(false);// draw white boundary over clipped region
 	
 	drawTextDisplays();		// text that shows up before level started or when game paused
 	drawStatusDisplays();	// text that is always on the screen
@@ -854,8 +860,8 @@ function drawGameBoundary(setAsClipping) {
 	ctx.lineWidth   = 1;
 	ctx.beginPath();
 	ctx.arc(GAME_SIZE_DIV2, TOP_MARGIN + GAME_SIZE_DIV2, GAME_SIZE_DIV2 - 1, 0, Math.PI2);
-	//ctx.stroke();
-	
+	ctx.stroke();
+
 	if (setAsClipping)
 		ctx.clip();
 }
