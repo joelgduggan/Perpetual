@@ -73,7 +73,7 @@ Math.PIOVER4  = Math.PI / 4.0;
 Math.PI3OVER2 = Math.PI * 1.5;
 
 function randInt(exclusiveMax) { return Math.floor(Math.random() * exclusiveMax); }
-function randBool()            { return randInt(2) == 0 ? true : false; }
+function randBool()            { return randInt(2) == 0; }
 
 function clamp(num, low, high) {
 	if      (num < low)  return low;
@@ -152,7 +152,7 @@ Span.prototype.set = function(a, b, r) {
 	else
 		this.length = this.b - this.a;	
 	this.halfLength = this.length / 2;
-}
+};
 
 Span.prototype.copy = function() {
 	var s = new Span();
@@ -160,17 +160,17 @@ Span.prototype.copy = function() {
 	s.b = this.b;
 	s.r = this.r;
 	return s;
-}
+};
 
 // returns the midpoint of the span in cartesian coordinates
 Span.prototype.midpoint = function() {
 	return getVector2(this.r, this.midAngle).convertToCartesian();
-}
+};
 
 // format : '(a,b,r)'
 Span.prototype.toString = function() {
 	return ('(' + this.a + ',' + this.b + ',' + this.r + ')');
-}
+};
 
 function getSpan(a, b, r) {
 	var s = new Span();
@@ -208,11 +208,8 @@ Span.prototype.containsAngle = function (s) {
 
 	var d  = Math.abs(this.midAngle - s);
 
-	if ( Math.min(d, Math.PI2 - d) < (this.length/2.0) )
-		return true;
-	else 
-		return false;
-}
+	return ( Math.min(d, Math.PI2 - d) < (this.length/2.0) );
+};
 
 
 // represents a javascript color, r,g,b = 0 - 255, a = 0.0 to 1.0
@@ -225,7 +222,7 @@ Color.prototype.set = function(r,g,b,a) {
 	this.g = clamp(Math.round(g), 0, 255);
 	this.b = clamp(Math.round(b), 0, 255);
 	this.a = clamp(a, 0.0, 1.0);
-}
+};
 
 function getColor(r,g,b,a) {
 	if (typeof(a) === 'undefined') a = 1.0;
@@ -248,12 +245,12 @@ function getColorStringRGBA(r,g,b,a) {
 
 Color.prototype.copy = function() {
 	return getColor(this.r, this.g, this.b, this.a);
-}
+};
 
 Color.prototype.toStringRGB = function() {
 	return ('rgb(' + this.r + ',' + this.g + ',' + this.b + ')');
-}
+};
 
 Color.prototype.toStringRGBA = function() {
 	return ('rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')');
-}
+};

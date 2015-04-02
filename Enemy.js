@@ -26,7 +26,7 @@ for (var i = 0; i < NUM_ENEMY_TYPES; i++)
 // precalculate the color strings
 var ENEMY_COLOR_STRING      = [];
 var ENEMY_DARK_COLOR_STRING = [];
-for (var i = 0; i < NUM_ENEMY_TYPES; i++) {
+for (i = 0; i < NUM_ENEMY_TYPES; i++) {
 	var c = ENEMY_COLOR[i];
 	ENEMY_COLOR_STRING[i]      = c.toStringRGB();
 	ENEMY_DARK_COLOR_STRING[i] = getColorStringRGB(c.r * 0.3, c.g * 0.3, c.b * 0.3);
@@ -63,7 +63,7 @@ Enemy.prototype.spawn = function (type) {
 	
 	if (this.type == ENEMY_B || this.type == ENEMY_G) 	
 		this.dirFlag = randBool();
-}
+};
 
 Enemy.prototype.update = function (delta) {		
 
@@ -89,9 +89,7 @@ Enemy.prototype.update = function (delta) {
 		
 		this.cycle += delta * ENEMY_F_CYCLE_SPEED;
 
-		var x = Math.sin(this.cycle);
-
-		var coeff = x;
+		var coeff =  Math.sin(this.cycle);
 		this.position.y = this.prePosition.y + coeff * (ENEMY_F_CYCLE_SPAN + (1.0-this.prePosition.x / GAME_SIZE_DIV2)*0.5);
 	}
 
@@ -118,7 +116,7 @@ Enemy.prototype.update = function (delta) {
 
 	this.hurtLastFrame = this.hurtThisFrame;
 	this.hurtThisFrame = false;
-}
+};
 
 Enemy.prototype.draw = function (ctx) {
 
@@ -140,7 +138,7 @@ Enemy.prototype.draw = function (ctx) {
 		ctx.fillStyle = WHITE;
 		ctx.fillTextAlign(this.menuText, this.position.x, this.position.y - ENEMY_RADIUS[this.type] - 20, 'center');
 	}
-}
+};
 
 
 // returns -1 if does not hit, otherwise returns the distance at which the laser hits this enemy
@@ -152,7 +150,7 @@ Enemy.prototype.checkLaserHit = function (rStartA, rStartB, rDir) {
 	if      (a == -1) return b;
 	else if (b == -1) return a;
 	else              return Math.min(a,b);
-}
+};
 
 // returns true if this enemy has entered inside of the player's shield radius
 Enemy.prototype.checkShieldHit = function (shieldRadius) {
@@ -161,7 +159,7 @@ Enemy.prototype.checkShieldHit = function (shieldRadius) {
 		return true;
 	else
 		return false;
-}
+};
 
 // returns true if this enemy is being hit by the pulse
 Enemy.prototype.checkPulseHit = function (pulseRadius) {
@@ -173,7 +171,7 @@ Enemy.prototype.checkPulseHit = function (pulseRadius) {
 	else
 		return false;
 
-}
+};
 
 // applies laser damage, returns true if it was killed this frame
 Enemy.prototype.applyDamage = function (laserPower) {
@@ -185,4 +183,4 @@ Enemy.prototype.applyDamage = function (laserPower) {
 		return true;
 
 	return false;
-}
+};

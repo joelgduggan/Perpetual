@@ -39,7 +39,7 @@
 
 var lastAnimRequest;			// returned by requestAnimationFrame
 var lastFrameMillis = 0;		// holds the time in milliseconds that the last frame was rendered at
-var lastDelta       = 0;
+var delta           = 0;
 var canvas          = null;
 var ctx       		= null;		
 var backCanvas      = null;
@@ -62,7 +62,7 @@ var enemies = [];					// this list is maintained (nulls are removed at end of fr
 var sortedEnemyRadius = [];			// used to draw enemies in order based on radius size
 var particleEngine = null;
 
-var enemyGlowGrads = [];			// color gradients for the different enemy glows
+//var enemyGlowGrads = [];			// color gradients for the different enemy glows
 
 var HELP_SCREEN_FILENAMES = [ 'Images/help1.png', 'Images/help2.png'];
 var helpScreenImages = [];				
@@ -92,7 +92,7 @@ Star.prototype.respawn = function() {
 	this.color = getColorStringRGB(c,c,c);
 	
 	this.radius = 0.6 + Math.random() * 0.5;
-}
+};
 
 Star.prototype.draw = function() {
 
@@ -114,7 +114,7 @@ Star.prototype.draw = function() {
 	ctx.beginPath();
 	ctx.arc(p.x, p.y, this.radius, 0, Math.PI2);
 	ctx.fill();
-}
+};
 
 
 
@@ -139,13 +139,13 @@ function oneTimeInitialization() {
 		ctx.textAlign = alignment || 'center';
 		ctx.fillText(text, x, y);
 		ctx.textAlign = 'start';
-	}		
+	};
 
 	// sound initialization
 	
 	var loadCount = 0;
 	createjs.Sound.addEventListener('fileload', preLoad);
-	function preLoad(event) {
+	function preLoad() {
 		loadCount++;
 		if (loadCount >= 10)
 			console.log('finished loading all sounds');
@@ -191,7 +191,7 @@ function oneTimeInitialization() {
 
 	particleEngine = new ParticleEngine();
 	
-	for (var i = 0; i < 300; i++)
+	for (i = 0; i < 300; i++)
 		stars[i] = new Star();
 	
 	startNewGame();		
@@ -208,19 +208,19 @@ function oneTimeInitialization() {
 		touchX = e.touches[0].pageX;
 		touchY = e.touches[0].pageY;
 		mouseMove(e.touches[0]);
-	}
+	};
 	document.ontouchmove = function(e){
 		e.preventDefault();
 		mouseMove(e.touches[0]);
-	}
+	};
 	document.ontouchend = function(e) {
 		e.preventDefault();
 		if ((new Date()).getTime() - touchTime < 400) 
 			mouseDownCoords(touchX, touchY);
-	}
+	};
 	
 	// create a list of all enemy radii's in descending order (remove duplicates)
-	for (var i = 0; i < ENEMY_RADIUS.length; i++) {
+	for (i = 0; i < ENEMY_RADIUS.length; i++) {
 		var exists = false;
 		for (var j = 0; j < sortedEnemyRadius.length; j++) {
 			if (ENEMY_RADIUS[i] == sortedEnemyRadius[j])
@@ -265,7 +265,7 @@ var startNewGame = function() {
 	}
 		
 	loadNewLevel(!player.upgradeDone);
-}
+};
 
 var loadNewLevel = function(selectUpgradeFirst) {
 
@@ -293,7 +293,7 @@ var loadNewLevel = function(selectUpgradeFirst) {
 	
 	for (var i = 0; i < stars.length; i++)
 		stars[i].respawn();
-}
+};
 
 function killPlayer() {
 
@@ -325,7 +325,7 @@ function killPlayer() {
 var doGameOver = function() {
 	
 	player.isGameOver = true;
-}
+};
 
 function mouseMove(e) {
 
@@ -397,7 +397,7 @@ function keyDown(e) {
 }
 
 function keyUp(e) {
-	var key = (e ? e:event).keyCode;
+	//var key = (e ? e:event).keyCode;
 }
 
 function resizeCanvas() {
@@ -603,7 +603,7 @@ function updateEnemies() {
 				a  = a.subEquals(enemyPos).getAngle();
 				b  = b.subEquals(enemyPos).getAngle();
 				
-				if (a > b) { var t = a; a = b; b = t; }
+				if (a > b) { t = a; a = b; b = t; }
 				if (Math.abs(b-a) > Math.PI) {
 					 t = a; a = b; b = t;
 					 b += Math.PI2;
@@ -658,7 +658,7 @@ function updateEnemies() {
 	}	// end for each enemy
 	
 	// if any enemies were removed, go through the list and fill in holes
-	for (var i = 0; i < enemies.length; i++) {
+	for (i = 0; i < enemies.length; i++) {
 		while (i < enemies.length && enemies[i] == null) {
 			enemies[i] = enemies[enemies.length-1];
 			enemies.length--;
@@ -698,8 +698,8 @@ function applyDamageToEnemy(i, damage) {
 function killEnemy(i) {
 
 	var type	   = enemies[i].type;
-	var steps      = Math.floor(ENEMY_RADIUS[type]);
-	var spawnPoint = getVector2(ENEMY_RADIUS[type], 0.0);
+	//var steps      = Math.floor(ENEMY_RADIUS[type]);
+	//var spawnPoint = getVector2(ENEMY_RADIUS[type], 0.0);
 	
 	particleEngine.addWaveParticle( enemies[i].position, ENEMY_COLOR[type], ENEMY_RADIUS[type]);
 	
@@ -734,7 +734,7 @@ function killEnemy(i) {
 
 function processMenuItem(menuItem) {
 
-	enemies = [];	
+	enemies = [];
 
 	switch (menuItem) {
 
@@ -742,12 +742,12 @@ function processMenuItem(menuItem) {
 		break;
 		case 'help_next' : 			player.helpScreenNum++;
 		break;
-		case 'help_back' : 			player.inHelpScreen = false;		
+		case 'help_back' : 			player.inHelpScreen = false;
 		break;
 		case 'options_sound_off' : 	isSoundOn = false;
 		break;
 		case 'options_sound_on' : 	isSoundOn = true;
-								    createjs.Sound.play(EXPLOSION_NAMES[randInt(EXPLOSION_NAMES.length)]).setVolume(EXPLOSION_VOLUME); 
+								    createjs.Sound.play(EXPLOSION_NAMES[randInt(EXPLOSION_NAMES.length)]).setVolume(EXPLOSION_VOLUME);
 		break;
 		case 'options_music_off' : 	isMusicOn = false;
 		break;
@@ -765,7 +765,7 @@ function processMenuItem(menuItem) {
 		break;
 		case 'help' : 				player.inHelpScreen = true;
 		break;
-		case 'options' : 			player.inOptionsScreen = true;		
+		case 'options' : 			player.inOptionsScreen = true;
 		break;
 		case 'upgrade_angle' : 		player.laserAngle += ANGLE_UPGRADE;
 							   		player.upgradeDone = true;
@@ -776,18 +776,18 @@ function processMenuItem(menuItem) {
 		case 'start' : 				player.levelStarted = true;
 		break;
 	}
-	
+
 	if (menuItem != 'start')
 		initMenuScreen();
 }
 
 function initMenuScreen() {
-	
+
 	enemies = [];
 
 	if (player.inHelpScreen)
 		spawnHelpEnemies();
-	else if (player.inOptionsScreen) 
+	else if (player.inOptionsScreen)
 		spawnOptionsEnemies();
 	else if (!player.upgradeDone) {
 		spawnUpgradeEnemies();
@@ -1019,19 +1019,19 @@ ScoreDigit.prototype.update = function(score) {
 		if (this.scroll >= 1.0)
 			this.isScrolling = false;
 	}
-}
+};
 
 ScoreDigit.prototype.draw = function() {
 
 	var x = this.scoreBoard.x + (this.scoreBoard.digits.length - this.place - 1) * this.scoreBoard.xSpacing;
 	
 	if (this.isScrolling) {
-		ctx.fillText(this.digit,    x, this.scoreBoard.y - this.scoreBoard.ySpacing*(1.0-this.scroll));
-		ctx.fillText(this.oldDigit, x, this.scoreBoard.y + this.scoreBoard.ySpacing*(this.scroll));
+		ctx.fillText(this.digit.toString(),    x, this.scoreBoard.y - this.scoreBoard.ySpacing*(1.0-this.scroll));
+		ctx.fillText(this.oldDigit.toString(), x, this.scoreBoard.y + this.scoreBoard.ySpacing*(this.scroll));
 	}
 	else 
 		ctx.fillText(this.digit, x, this.scoreBoard.y);
-}
+};
 
 function ScoreBoard(numDigits, x, y, xSpacing, ySpacing, font, textColor) {
 	
@@ -1055,14 +1055,14 @@ ScoreBoard.prototype.draw = function(score) {
 	ctx.clip();
 	
 	ctx.fillStyle = this.textColor;
-	ctx.font = this.font
+	ctx.font = this.font;
 
 	for (var i = 0; i < this.digits.length; i++) {
 		this.digits[i].update(score);
 		this.digits[i].draw();
 	}
 	ctx.restore();
-}
+};
 
 var mainScoreBoard = new ScoreBoard(8, 40, 30, 11, 18, '18px Arial', 'rgb(100, 100, 255)');
 

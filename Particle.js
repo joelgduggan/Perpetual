@@ -37,7 +37,7 @@ Particle.prototype.spawn = function(type, position) {
 	
 	if (type == PARTICLE_WAVE) 
 		this.velocity.set(0, 0);
-}
+};
 
 Particle.prototype.update = function() {
 
@@ -46,7 +46,7 @@ Particle.prototype.update = function() {
 
 	if ((this.aliveTime += delta) >= this.lifeTime)
 		this.active = false;
-}
+};
 
 Particle.prototype.drawWave = function(ctx) {
 
@@ -64,7 +64,7 @@ Particle.prototype.drawWave = function(ctx) {
 	ctx.beginPath();
 	ctx.arc(this.position.x, this.position.y, r, 0, Math.PI2);
 	ctx.stroke();
-}
+};
 
 
 //
@@ -82,7 +82,7 @@ ParticleEngine.prototype.clear = function() {
 
 	for (var i = 0; i < MAX_PARTICLES; i++)
 		particles[i].active = false;
-}
+};
 
 ParticleEngine.prototype.addSparkParticles = function (position, enemyPosition, enemyVelocity, relativeAmount) {
 
@@ -102,7 +102,7 @@ ParticleEngine.prototype.addSparkParticles = function (position, enemyPosition, 
 				break;
 		}
 	}
-}
+};
 
 ParticleEngine.prototype.addWaveParticle = function(position, color, radius) {
 
@@ -123,13 +123,13 @@ ParticleEngine.prototype.addWaveParticle = function(position, color, radius) {
 			break;
 		}
 	}
-}
+};
 
 
-var maxCount = 0;
+//var maxCount = 0;
 
 ParticleEngine.prototype.updateAndDraw = function (gamePaused, ctx) {
-	var count = 0;
+	//var count = 0;
 	this.hasParticles = false;
 	
 	// if paused, don't update particles
@@ -146,7 +146,7 @@ ParticleEngine.prototype.updateAndDraw = function (gamePaused, ctx) {
 	ctx.beginPath();
 	var m;
 	
-	for (var i = 0; i < MAX_PARTICLES; i++) {
+	for (i = 0; i < MAX_PARTICLES; i++) {
 		if (particles[i].active && particles[i].type == PARTICLE_SPARK) {
 			
 			ctx.moveTo(particles[i].position.x, particles[i].position.y);
@@ -168,7 +168,7 @@ ParticleEngine.prototype.updateAndDraw = function (gamePaused, ctx) {
 	ctx.stroke();
 	
 	// now anything else
-	for (var i = 0; i < MAX_PARTICLES; i++) {
+	for (i = 0; i < MAX_PARTICLES; i++) {
 		if (particles[i].active && particles[i].type == PARTICLE_WAVE) {
 			//count++;
 			particles[i].drawWave(ctx);		
@@ -181,4 +181,4 @@ ParticleEngine.prototype.updateAndDraw = function (gamePaused, ctx) {
 		maxCount = count;
 		console.log('new max particles = ' + count);
 	}*/
-}
+};

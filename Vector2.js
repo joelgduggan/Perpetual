@@ -12,62 +12,62 @@ Vector2.prototype.set = function(x,y) {
 	this.x = x; 
 	this.y = y; 
 	return this; 
-}
+};
 
 Vector2.prototype.setVector2 = function(v) { 
 	this.x = v.x; 
 	this.y = v.y; 
 	return this; 
-}
+};
 
 function getVector2(x, y) { return (new Vector2()).set(x,y); }
 
-Vector2.prototype.copy = function() { return getVector2(this.x, this.y); }
+Vector2.prototype.copy = function() { return getVector2(this.x, this.y); };
 
 // returns the length (distance to origin)
-Vector2.prototype.length = function() { return Math.sqrt(this.x*this.x + this.y*this.y); }
+Vector2.prototype.length = function() { return Math.sqrt(this.x*this.x + this.y*this.y); };
 
 // often useful if all you need is to compare the lengths of two vectors, but don't need to know the exact lengths involved
-Vector2.prototype.lengthSquared = function() { return (this.x*this.x + this.y*this.y); }		
+Vector2.prototype.lengthSquared = function() { return (this.x*this.x + this.y*this.y); };
 
 Vector2.prototype.add = function(b) { 
 	var a = new Vector2();
 	a.x = this.x + b.x;
 	a.y = this.y + b.y;
 	return a;
-}
+};
 
 Vector2.prototype.addEquals = function(b) {
-	this.x += b.x;
-	this.y += b.y;
-	return this;
-}
+    this.x += b.x;
+    this.y += b.y;
+    return this;
+};
 
 Vector2.prototype.sub = function(b) { 
 	var a = new Vector2();
 	a.x = this.x - b.x;
 	a.y = this.y - b.y;
 	return a;
-}
+};
 
 Vector2.prototype.subEquals = function(b) {
 	this.x -= b.x;
 	this.y -= b.y;
 	return this;
-}
+};
 
 Vector2.prototype.mul = function(b) { 
 	var a = new Vector2();
 	a.x = this.x * b;
 	a.y = this.y * b;
 	return a;
-}
+};
 
 Vector2.prototype.mulEquals = function(b) {
 	this.x *= b;
 	this.y *= b;
 	return this;
-}
+};
 
 // this is division of a scalar value
 Vector2.prototype.div = function(b) { 
@@ -75,76 +75,76 @@ Vector2.prototype.div = function(b) {
 	a.x = this.x / b;
 	a.y = this.y / b;
 	return a;
-}
+};
 
 Vector2.prototype.divEquals = function(b) {
 	this.x /= b;
 	this.y /= b;
 	return this;
-}
+};
 
 // returns the dot product of this and another vector
 Vector2.prototype.dot = function(b) {
 	return (this.x * b.x + this.y * b.y);
-}
+};
 
 // returns the distance from this Vector2 to another
 Vector2.prototype.distance = function(b) {
 	return (b.sub(this)).length();
-}
+};
 
 // returns a normalized version of this Vector2
 Vector2.prototype.normalize = function() {
 	return this.div(this.length());
-}
+};
 
 Vector2.prototype.normalizeEquals = function() {
 	return this.divEquals(this.length());
-}
+};
 
 // returns a vector of the same direction, but new magnitude
 Vector2.prototype.resize = function(newMagnitude) {
 	return this.mul(newMagnitude / this.length());
-}
+};
 
 Vector2.prototype.resizeEquals = function(newMagnitude) {
 	return this.mulEquals(newMagnitude / this.length());
-}
+};
 
 // returns a vector perpendicular to this one
 Vector2.prototype.perpendicular = function() {
 	return getVector2(-this.y, this.x);
-}
+};
 
 Vector2.prototype.perpendicularEquals = function() {
 	return this.set(-this.y, this.x);
-}
+};
 
 Vector2.prototype.negate = function() {
 	return getVector2(-this.x, -this.y);
-}
+};
 
 Vector2.prototype.negateEquals = function() {
 	return this.set(-this.x, -this.y);
-}
+};
 
 Vector2.prototype.getAngle = function() {
 	return Math.atan2(this.y, this.x);
-}
+};
 
 // treats this vector as polar coordinates (radius, radians) and returns a vector in cartesian coordinates
 Vector2.prototype.convertToCartesian = function() {
 	return getVector2(this.x * Math.cos(this.y), this.x * Math.sin(this.y));
-}
+};
 
 Vector2.prototype.convertToCartesianEquals = function() {
 	return this.set(this.x * Math.cos(this.y), this.x * Math.sin(this.y));
-}
+};
 
 // format : '(x,y)'
 Vector2.prototype.toString = function() {
 	return ('(' + this.x + ',' + this.y + ')');
-}
+};
 
 var ORIGIN = getVector2(0, 0);
 

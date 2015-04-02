@@ -5,9 +5,7 @@ var LEVEL_BOX_X     = GAME_SIZE_DIV2 - LEVEL_BOX_WIDTH/2;
 var LEVEL_BOX_Y     = GAME_SIZE_DIV2 - LEVEL_BOX_HEIGHT/2 + TOP_MARGIN;
 
 // bonus level settings
-var NUM_BONUS_TYPES = 3;
-
-var BONUS_TYPE_FASTER      = 0, 
+var BONUS_TYPE_FASTER      = 0,
 	BONUS_TYPE_SPAWN_RATE  = 1,
 	BONUS_TYPE_SPAWN_RATE2 = 2;
 	
@@ -96,7 +94,7 @@ Player.prototype.startBonusLevel = function(laserAngle, laserPower, spawnRate, b
 		this.bonusFactor = 100.0;		// starting speed
 	else if (bonusType == BONUS_TYPE_SPAWN_RATE) {
 	}
-}
+};
 
 Player.prototype.startNewLevel = function() {
 
@@ -111,7 +109,7 @@ Player.prototype.startNewLevel = function() {
 	
 	this.upgradeDone    = (this.level != 0 ? false : true);		// no upgrade before first level
 	this.killsNeeded    = Math.floor(SECONDS_PER_LEVEL * player.levelSpawnRate);	
-}
+};
 
 Player.prototype.calcSpawnRate = function() {
 
@@ -123,7 +121,7 @@ Player.prototype.calcSpawnRate = function() {
 		else
 			this.levelSpawnRate += (this.levelSpawnRate * (1.0+SPAWN_RATE_MIN_PERC)) * SPAWN_RATE_MIN_PERC;
 	}
-}
+};
 
 var PLAYER_DEATH_ANIM_TIME = 0.75;
 
@@ -165,7 +163,7 @@ Player.prototype.update = function() {
 	while (this.laserGrad > 1.0) {
 		this.laserGrad -= 1.0;
 	}
-}
+};
 
 
 var LASER_GRAD_SPEED = 4.0;
@@ -235,7 +233,7 @@ Player.prototype.draw = function(ctx) {
 	end   = getVector2(DIAG_SIZE + LASER_GRAD_RUNOFF , this.laserDir).convertToCartesian().add(PLAYER_POSITION);
 	
 	if (highRenderQuality) {
-		var grd = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
+		grd = ctx.createLinearGradient(start.x, start.y, end.x, end.y);
 		grd.addColorStop(clamp(this.laserGrad - LASER_GRAD_WIDTH, 0, 1), LASER_GRAD_COLOR_MAIN);
 		grd.addColorStop(this.laserGrad, LASER_GRAD_COLOR_ALT);
 		grd.addColorStop(clamp(this.laserGrad + LASER_GRAD_WIDTH, 0, 1), LASER_GRAD_COLOR_MAIN);
@@ -244,7 +242,7 @@ Player.prototype.draw = function(ctx) {
 	else
 		ctx.fillStyle = LASER_GRAD_COLOR_MAIN;
 
-	for (var i = 0; i < this.laserSpans.length; i++) {
+	for (i = 0; i < this.laserSpans.length; i++) {
 
 		ctx.beginPath();
 		ctx.moveTo(PLAYER_X, PLAYER_Y);							// this  0.001  tries to eliminate gaps between spans
@@ -256,7 +254,7 @@ Player.prototype.draw = function(ctx) {
 		ctx.lineTo(PLAYER_X, PLAYER_Y);
 		ctx.fill();
 	}
-}
+};
 
 Player.prototype.mouseMove = function (mx, my) {
 	
@@ -264,7 +262,7 @@ Player.prototype.mouseMove = function (mx, my) {
 		return;
 
 	this.laserDir   = Math.atan2(my - PLAYER_Y, mx - PLAYER_X);
-}
+};
 
 Player.prototype.mouseDown = function (mx, my) {
 
@@ -282,29 +280,29 @@ Player.prototype.mouseDown = function (mx, my) {
 		else if (my >= TOP_MARGIN)
 			this.startPulse();
 	}
-}
+};
 
 Player.prototype.getShieldRadius = function() {
 	return ( PLAYER_RADIUS + SHIELDS_RADIUS_DELTA * this.shields );
-}
+};
 
 Player.prototype.getSpawnRate = function() {
 	return (this.isBonusLevel ? this.bonusSpawnRate : this.levelSpawnRate);
-}
+};
 
 Player.prototype.getLaserAngle = function() {
 	if (this.levelStarted)
 		return (this.isBonusLevel ? this.bonusLaserAngle : this.laserAngle);
 	else
 		return LASER_START_ANGLE;
-}
+};
 
 Player.prototype.getLaserPower = function() {
 	if (this.levelStarted)
 		return (this.isBonusLevel ? this.bonusLaserPower : this.laserPower);
 	else
 		return 1.0;
-}
+};
 
 Player.prototype.startPulse = function () {
 
@@ -317,13 +315,13 @@ Player.prototype.startPulse = function () {
 		this.pulseSound = createjs.Sound.play("pulse");
 		this.pulseSound.setVolume(PULSE_VOLUME); 
 	}
-}
+};
 
 Player.prototype.killShield = function() {
 
 	createjs.Sound.play('player_damage').setVolume(PLAYER_DAMAGE_VOLUME);
 	this.shields--;
-}
+};
 
 /*
 - cookie values cannot contain whitespace, commas, or semicolins
@@ -341,7 +339,7 @@ Player.prototype.writeSaveCookie = function() {
 	value += Number(highRenderQuality).toString();
 	
 	setCookie('perpetual_save', value, 90);
-}
+};
 
 Player.prototype.readSaveCookie = function() {
 	
@@ -350,7 +348,7 @@ Player.prototype.readSaveCookie = function() {
 		return;
 		
 	values = values.split('-');
-	
+
 	this.level          = parseInt(values[0]);
 	this.score          = parseInt(values[1]);
 	this.laserAngle     = parseFloat(values[2]);
@@ -361,4 +359,4 @@ Player.prototype.readSaveCookie = function() {
 	
 	this.upgradeDone    = (this.level == 0);
 	this.isBonusLevel   = false;					
-}
+};
