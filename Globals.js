@@ -9,7 +9,12 @@ var isMusicOn = false;
 // no glow under player, no shimmer on the laser
 var highRenderQuality = true;
 
+var scene;
+var camera;
+var renderer;
+
 var delta;
+
 
 
 //

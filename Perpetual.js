@@ -40,15 +40,12 @@
 var lastAnimRequest;			// returned by requestAnimationFrame
 var lastFrameMillis = 0;		// holds the time in milliseconds that the last frame was rendered at
 var delta           = 0;
-var canvas          = null;
-var ctx       		= null;		
-var backCanvas      = null;
 var prevWindowWidth = 0;
 var prevWindowHeight= 0;
 var scaleFactor     = 1.0;		// how much game is scaled relative to the default size (determined by browser size)
 
-var touchTime = 0;
-var touchX, touchY;
+//var touchTime = 0;
+//var touchX, touchY;
 
 var animFrame = window.requestAnimationFrame       ||
 				window.webkitRequestAnimationFrame ||
@@ -109,11 +106,11 @@ Star.prototype.draw = function() {
 	p.x = (p.x + 1.0) * CANVAS_WIDTH/2.0;
 	p.y = (p.y + 1.0) * CANVAS_WIDTH/2.0;		
 
-	ctx.fillStyle = this.color;
-	
-	ctx.beginPath();
-	ctx.arc(p.x, p.y, this.radius, 0, Math.PI2);
-	ctx.fill();
+	//ctx.fillStyle = this.color;
+	//
+	//ctx.beginPath();
+	//ctx.arc(p.x, p.y, this.radius, 0, Math.PI2);
+	//ctx.fill();
 };
 
 
@@ -123,23 +120,42 @@ Star.prototype.draw = function() {
 //
 function oneTimeInitialization() {
 
-	// attempt to get canvas context
-	canvas = document.getElementById('canvas');
-	if (canvas.getContext) {
-		ctx = canvas.getContext('2d');
-		resizeCanvas();
-	}
-	else {
-		alert('HTML5 Canvas not supported. Sorry.');
-		return;
-	}
+	//// attempt to get canvas context
+	//canvas = document.getElementById('canvas');
+	//if (canvas.getContext) {
+	//	ctx = canvas.getContext('2d');
+	//	resizeCanvas();
+	//}
+	//else {
+	//	alert('HTML5 Canvas not supported. Sorry.');
+	//	return;
+	//}
 		
-	// define a helper function to use a different text alignment (default center if not defined)
-	ctx.fillTextAlign = function(text, x, y, alignment) {
-		ctx.textAlign = alignment || 'center';
-		ctx.fillText(text, x, y);
-		ctx.textAlign = 'start';
-	};
+	//// define a helper function to use a different text alignment (default center if not defined)
+	//ctx.fillTextAlign = function(text, x, y, alignment) {
+	//	ctx.textAlign = alignment || 'center';
+	//	ctx.fillText(text, x, y);
+	//	ctx.textAlign = 'start';
+	//};
+
+	scene = new THREE.Scene();
+
+	camera = new THREE.OrthographicCamera(0, CANVAS_WIDTH, 0, CANVAS_HEIGHT, 1, 100);
+	camera.position.z = 50;
+
+	renderer = new THREE.WebGLRenderer();
+	resizeRenderer();
+	renderer.setClearColor(0x101010);
+	document.getElementById("main_div").appendChild( renderer.domElement );
+
+
+	var geometry = new THREE.BoxGeometry( 100, 100, 1 );
+	var material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
+	var cube = new THREE.Mesh(geometry, material);
+	cube.position.x = CANVAS_WIDTH/2;
+	cube.position.y = CANVAS_HEIGHT/2;
+	scene.add( cube );
+
 
 	// sound initialization
 	
@@ -169,19 +185,19 @@ function oneTimeInitialization() {
 	createjs.Sound.defaultInterruptBehavior = createjs.Sound.INTERRUPT_EARLY;
 	console.log(createjs.Sound.activePlugin);
 
-	// create the background image
-	backCanvas = document.createElement('canvas');
-	backCanvas.width  = 160;
-	backCanvas.height = 160;
-	var bctx = backCanvas.getContext('2d');
-
-	var grad = bctx.createRadialGradient(80, 80, 0.0, 80, 80, 80);	
-	grad.addColorStop(0.0, 'rgb(0,0,150)');
-	grad.addColorStop(1.0, 'rgb(0,0,0)');	
-	bctx.fillStyle = grad;
-	bctx.beginPath();
-	bctx.arc(80, 80, 81, 0, Math.PI2);
-	bctx.fill();	
+	//// create the background image
+	//backCanvas = document.createElement('canvas');
+	//backCanvas.width  = 160;
+	//backCanvas.height = 160;
+	//var bctx = backCanvas.getContext('2d');
+    //
+	//var grad = bctx.createRadialGradient(80, 80, 0.0, 80, 80, 80);
+	//grad.addColorStop(0.0, 'rgb(0,0,150)');
+	//grad.addColorStop(1.0, 'rgb(0,0,0)');
+	//bctx.fillStyle = grad;
+	//bctx.beginPath();
+	//bctx.arc(80, 80, 81, 0, Math.PI2);
+	//bctx.fill();
 	
 	// load help screen images
 	for (var i = 0; i < HELP_SCREEN_FILENAMES.length; i++) {
@@ -202,22 +218,22 @@ function oneTimeInitialization() {
 	document.onkeyup     = keyUp;
 	
 	// for mobile support
-	document.ontouchstart = function(e) {
-		e.preventDefault();
-		touchTime = (new Date()).getTime();
-		touchX = e.touches[0].pageX;
-		touchY = e.touches[0].pageY;
-		mouseMove(e.touches[0]);
-	};
-	document.ontouchmove = function(e){
-		e.preventDefault();
-		mouseMove(e.touches[0]);
-	};
-	document.ontouchend = function(e) {
-		e.preventDefault();
-		if ((new Date()).getTime() - touchTime < 400) 
-			mouseDownCoords(touchX, touchY);
-	};
+	//document.ontouchstart = function(e) {
+	//	e.preventDefault();
+	//	touchTime = (new Date()).getTime();
+	//	touchX = e.touches[0].pageX;
+	//	touchY = e.touches[0].pageY;
+	//	mouseMove(e.touches[0]);
+	//};
+	//document.ontouchmove = function(e){
+	//	e.preventDefault();
+	//	mouseMove(e.touches[0]);
+	//};
+	//document.ontouchend = function(e) {
+	//	e.preventDefault();
+	//	if ((new Date()).getTime() - touchTime < 400)
+	//		mouseDownCoords(touchX, touchY);
+	//};
 	
 	// create a list of all enemy radii's in descending order (remove duplicates)
 	for (i = 0; i < ENEMY_RADIUS.length; i++) {
@@ -245,6 +261,22 @@ function oneTimeInitialization() {
 	
 	// start animation request loop
 	lastAnimRequest = animFrame( recursiveMainLoop );
+}
+
+function resizeRenderer() {
+
+	prevWindowWidth  = window.innerWidth;
+	prevWindowHeight = window.innerHeight;
+
+	var height   = window.innerHeight - CANVAS_MARGIN;
+	var width    = Math.round(height * ASPECT_RATIO);
+
+	if (width > window.innerWidth) {
+		width  = window.innerWidth - CANVAS_MARGIN;
+		height = Math.round(width / ASPECT_RATIO);
+	}
+
+	renderer.setSize(width, height);
 }
 
 var startNewGame = function() {
@@ -329,16 +361,16 @@ var doGameOver = function() {
 
 function mouseMove(e) {
 
-	var mx = (e.pageX - canvas.offsetLeft) / scaleFactor;
-	var my = (e.pageY - canvas.offsetTop)  / scaleFactor;
+	var mx = (e.pageX - renderer.domElement.offsetLeft) / scaleFactor;
+	var my = (e.pageY - renderer.domElement.offsetTop)  / scaleFactor;
 	
 	player.mouseMove(mx, my);
 }
 
 function mouseDown(e) {
 
-	var mx = (e.pageX - canvas.offsetLeft) / scaleFactor;
-	var my = (e.pageY - canvas.offsetTop)  / scaleFactor;
+	var mx = (e.pageX - renderer.domElement.offsetLeft) / scaleFactor;
+	var my = (e.pageY - renderer.domElement.offsetTop)  / scaleFactor;
 	mouseDownCoords(mx, my);
 }
 
@@ -400,36 +432,15 @@ function keyUp(e) {
 	//var key = (e ? e:event).keyCode;
 }
 
-function resizeCanvas() {
-	
-	prevWindowWidth = window.innerWidth;
-	prevWindowHeight= window.innerHeight;
-
-	canvas.height   = window.innerHeight - CANVAS_MARGIN;	
-	canvas.width    = Math.round(canvas.height * ASPECT_RATIO);
-	
-	if (canvas.width > window.innerWidth) {
-		canvas.width  = window.innerWidth - CANVAS_MARGIN;
-		canvas.height = Math.round(canvas.width / ASPECT_RATIO);
-	}
-	
-	scaleFactor     = canvas.height / CANVAS_HEIGHT;		
-	
-	// scale canvas to fit it's new size
-	ctx.setTransform(scaleFactor, 0.0, 0.0, scaleFactor, 0.0, 0.0);
-	ctx.textBaseline = 'top';
-}
-
-
 function updateFrame() {
-	if (ctx == null)
+	if (renderer == null)
 		return;
 	if (delta > 1.0)
 		delta = 0.17;
 		
 	// check for window being resized
 	if (window.innerWidth != prevWindowWidth || window.innerHeight != prevWindowHeight)
-		resizeCanvas();
+		resizeRenderer();
 	
 	//***************************************
 	// UPDATE GAME
@@ -456,39 +467,41 @@ function updateFrame() {
 	// DRAW GAME
 	//**************************************	
 
-	ctx.fillStyle = BLACK;
-	ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
-	if (highRenderQuality)
-		ctx.drawImage(backCanvas, GAME_SIZE_DIV2 - 80, GAME_SIZE_DIV2 - 80 + TOP_MARGIN);
-	
-	ctx.save();		// needed before we clip the drawing region
-	drawGameBoundary(true);
-	
-	drawBackground();
-	
-	if (player.inHelpScreen)
-		ctx.drawImage(helpScreenImages[player.helpScreenNum], 0, 0);
-
-	player.draw(ctx);
-	
-	drawEnemies();	
-		
-	particleEngine.updateAndDraw(player.isGamePaused, ctx);
-	
-	ctx.restore();			// get rid of clipping region
-	
-	drawGameBoundary(false);// draw white boundary over clipped region
-	
-	drawTextDisplays();		// text that shows up before level started or when game paused
-	drawStatusDisplays();	// text that is always on the screen
-	
-	if (player.inDeathAnim) {
-		var x = 1.0 - Math.abs(player.deathAnimCount / PLAYER_DEATH_ANIM_TIME - 0.5) * 2.0;
-		ctx.fillStyle = 'rgba(255, 0, 0,' + x + ')';
-		ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	}
-	
-	drawFPS();
+	renderer.render( scene, camera );
+    //
+	//ctx.fillStyle = BLACK;
+	//ctx.fillRect(0,0,CANVAS_WIDTH, CANVAS_HEIGHT);
+	//if (highRenderQuality)
+	//	ctx.drawImage(backCanvas, GAME_SIZE_DIV2 - 80, GAME_SIZE_DIV2 - 80 + TOP_MARGIN);
+	//
+	//ctx.save();		// needed before we clip the drawing region
+	//drawGameBoundary(true);
+	//
+	//drawBackground();
+	//
+	//if (player.inHelpScreen)
+	//	ctx.drawImage(helpScreenImages[player.helpScreenNum], 0, 0);
+    //
+	//player.draw(ctx);
+	//
+	//drawEnemies();
+	//
+	//particleEngine.updateAndDraw(player.isGamePaused, ctx);
+	//
+	//ctx.restore();			// get rid of clipping region
+	//
+	//drawGameBoundary(false);// draw white boundary over clipped region
+	//
+	//drawTextDisplays();		// text that shows up before level started or when game paused
+	//drawStatusDisplays();	// text that is always on the screen
+	//
+	//if (player.inDeathAnim) {
+	//	var x = 1.0 - Math.abs(player.deathAnimCount / PLAYER_DEATH_ANIM_TIME - 0.5) * 2.0;
+	//	ctx.fillStyle = 'rgba(255, 0, 0,' + x + ')';
+	//	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	//}
+	//
+	//drawFPS();
 }
 
 function spawnNewEnemies() {
@@ -1082,8 +1095,8 @@ function drawFPS() {
 		numFrames = 0;
 	}
 	numFrames++;
-	ctx.fillStyle = WHITE;
-	ctx.fillText(fps, CANVAS_WIDTH - 30, CANVAS_HEIGHT - 20);
+	//ctx.fillStyle = WHITE;
+	//ctx.fillText(fps, CANVAS_WIDTH - 30, CANVAS_HEIGHT - 20);
 }
 
 var recursiveMainLoop = function() {
